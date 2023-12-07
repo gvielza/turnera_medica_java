@@ -59,7 +59,8 @@ JDateChooser datechooser = new JDateChooser();
                 //turnoM_actual.tomarTurno(fechatxt,sobreturno,paciente_actual.getId(),medico_actual.getId());
 
                 JOptionPane.showMessageDialog(null,"Se agregó el turno correctamente "+ pacientetxt);
-
+                setVisible(false);
+                new VInicio().setVisible(true);
             }
         });
     }

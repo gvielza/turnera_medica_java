@@ -7,6 +7,9 @@ public class Medico {
     public Medico(String medicotxt) {
     }
 
+    public Medico(int id, String nombre, double costoConsulta) {
+    }
+
     public String getNombre() {
         return nombre;
     }

@@ -1,6 +1,8 @@
 package org.turnera;
 
+import java.awt.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class TurnoManager {
     private static final String URL = "jdbc:h2:./data/turnos";
@@ -9,17 +11,21 @@ public class TurnoManager {
 
     // ... Otros métodos de la clase
 
-    public void registrarMedico(String nombre, double costoConsulta) {
+    public boolean registrarMedico(int dni, String nombre, double costoConsulta) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            String query = "INSERT INTO Medico (nombre, costoConsulta) VALUES (?, ?)";
+            String query = "INSERT INTO Medico (id,nombre, costoConsulta) VALUES (?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, nombre);
-                statement.setDouble(2, costoConsulta);
-                statement.executeUpdate();
+                statement.setInt(1, dni);
+                statement.setString(2, nombre);
+                statement.setDouble(3, costoConsulta);
+                int filas=statement.executeUpdate();
+                if (filas>0) return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
+        return false;
     }
 
     public void registrarPaciente(String nombre) {
@@ -68,6 +74,34 @@ public class TurnoManager {
             e.printStackTrace();
         }
         return false; // En caso de error, consideramos que el médico no está disponible
+    }
+
+    public List obtenerTodosLosMedicos() {
+        java.util.List<Medico> medicos = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String query = "SELECT id, nombre, costoConsulta FROM Medico";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int id = resultSet.getInt("id");
+                        String nombre = resultSet.getString("nombre");
+                        double costoConsulta = resultSet.getDouble("costoConsulta");
+
+                        Medico medico = new Medico(id,nombre,costoConsulta);
+                        medico.setId(id);
+                        medico.setNombre(nombre);
+                        medico.setCostoConsulta(costoConsulta);
+
+                        medicos.add(medico);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return (List) medicos;
     }
 
 

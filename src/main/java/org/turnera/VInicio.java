@@ -3,6 +3,7 @@ package org.turnera;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VInicio extends JFrame{
     private JButton agregarmedicoButton;
@@ -31,6 +32,13 @@ public class VInicio extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 panelinicio.setVisible(false);
                 new VTurno().setVisible(true);
+            }
+        });
+        listarMedicosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //mostrar aqui la lista de medicos
+                JOptionPane.showMessageDialog(null, "Mas adelante ..");
             }
         });
     }
